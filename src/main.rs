@@ -1,5 +1,5 @@
 use anyhow;
-use iced::{Sandbox, Settings};
+use iced::{Application, Settings};
 use log::{debug, trace, LevelFilter};
 use log4rs::{
     self,

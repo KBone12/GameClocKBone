@@ -8,6 +8,8 @@ edition = "2018"
 
 [dependencies]
 anyhow = "1.0.32"
+futures-timer = "3.0.2"
 iced = "0.1.1"
+iced_futures = "*"
 log = "0.4.11"
 log4rs = "0.13.0"
