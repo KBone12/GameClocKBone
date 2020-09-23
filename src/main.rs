@@ -1,4 +1,5 @@
 use anyhow;
+use iced::{Sandbox, Settings};
 use log::{debug, trace, LevelFilter};
 use log4rs::{
     self,
@@ -15,6 +16,9 @@ use log4rs::{
     filter::threshold::ThresholdFilter,
     Handle,
 };
+
+mod pane;
+use pane::RootPane;
 
 fn setup_logger() -> anyhow::Result<Handle> {
     let log_dir = std::env::current_dir()?.join("log");
@@ -64,6 +68,8 @@ fn main() -> anyhow::Result<()> {
     if cfg!(debug_assertions) {
         debug!("Debug mode!");
     }
+
+    RootPane::run(Settings::default());
 
     Ok(())
 }
