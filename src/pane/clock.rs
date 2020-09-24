@@ -28,7 +28,7 @@ impl Clock1PPane {
             remaining: Duration::new(5, 0),
             toggle_button: button::State::new(),
             pause_button: button::State::new(),
-            running: true,
+            running: false,
         }
     }
 
