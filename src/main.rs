@@ -18,6 +18,8 @@ use log4rs::{
 };
 
 mod pane;
+mod settings;
+
 use pane::RootPane;
 
 fn setup_logger() -> anyhow::Result<Handle> {

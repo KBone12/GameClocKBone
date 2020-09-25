@@ -3,6 +3,8 @@ use std::collections::VecDeque;
 use iced::{executor, Application, Column, Command, Element, Subscription};
 use log::debug;
 
+use crate::settings::Settings;
+
 mod clock;
 mod pause;
 
@@ -11,6 +13,7 @@ use pause::{PauseMessage, PausePane};
 
 pub struct RootPane {
     children: VecDeque<Pane>,
+    settings: Settings,
 }
 
 impl Application for RootPane {
@@ -20,8 +23,11 @@ impl Application for RootPane {
 
     fn new(_flags: Self::Flags) -> (Self, Command<Self::Message>) {
         let mut children = VecDeque::new();
-        children.push_back(Pane::Clock1P(Clock1PPane::new()));
-        (Self { children }, Command::none())
+        let settings = Settings::default();
+        children.push_back(Pane::Clock1P(Clock1PPane::new(
+            settings.clock().time_limit(),
+        )));
+        (Self { children, settings }, Command::none())
     }
 
     fn title(&self) -> String {
@@ -48,7 +54,9 @@ impl Application for RootPane {
                 }
                 PauseMessage::Reset => {
                     self.children.clear();
-                    self.children.push_back(Pane::Clock1P(Clock1PPane::new()));
+                    self.children.push_back(Pane::Clock1P(Clock1PPane::new(
+                        self.settings.clock().time_limit(),
+                    )));
                 }
             },
         };

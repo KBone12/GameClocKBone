@@ -17,15 +17,17 @@ use iced_futures::{
 
 pub struct Clock1PPane {
     remaining: Duration,
+    interval: Duration,
     toggle_button: button::State,
     pause_button: button::State,
     running: bool,
 }
 
 impl Clock1PPane {
-    pub fn new() -> Self {
+    pub fn new(time_limit: Duration) -> Self {
         Self {
-            remaining: Duration::new(5, 0),
+            remaining: time_limit,
+            interval: Duration::from_millis(10),
             toggle_button: button::State::new(),
             pause_button: button::State::new(),
             running: false,
@@ -39,8 +41,8 @@ impl Clock1PPane {
             }
             Clock1PMessage::Tick(_now) => {
                 if self.running {
-                    if self.remaining > Duration::from_millis(10) {
-                        self.remaining -= Duration::from_millis(10);
+                    if self.remaining > self.interval {
+                        self.remaining -= self.interval;
                     } else {
                         self.remaining = Duration::new(0, 0);
                     }
@@ -93,7 +95,7 @@ impl Clock1PPane {
     }
 
     pub fn subscription(&self) -> Subscription<Clock1PMessage> {
-        Subscription::from_recipe(ClockRecipe(Duration::from_millis(10))).map(Clock1PMessage::Tick)
+        Subscription::from_recipe(ClockRecipe(self.interval)).map(Clock1PMessage::Tick)
     }
 }
 
