@@ -17,6 +17,7 @@ use iced_futures::{
 
 pub struct Clock1PPane {
     remaining: Duration,
+    previous: Instant,
     toggle_button: button::State,
     pause_button: button::State,
     running: bool,
@@ -26,6 +27,7 @@ impl Clock1PPane {
     pub fn new() -> Self {
         Self {
             remaining: Duration::new(5, 0),
+            previous: Instant::now(),
             toggle_button: button::State::new(),
             pause_button: button::State::new(),
             running: false,
@@ -37,17 +39,26 @@ impl Clock1PPane {
             Clock1PMessage::Pause => {
                 self.running = false;
             }
-            Clock1PMessage::Tick(_now) => {
+            Clock1PMessage::Tick(now) => {
                 if self.running {
-                    if self.remaining > Duration::from_millis(10) {
-                        self.remaining -= Duration::from_millis(10);
+                    if now < self.previous {
+                        self.previous = now;
                     } else {
-                        self.remaining = Duration::new(0, 0);
+                        let dt = now - self.previous;
+                        self.previous = now;
+                        if self.remaining > dt {
+                            self.remaining -= dt;
+                        } else {
+                            self.remaining = Duration::new(0, 0);
+                        }
                     }
                 }
             }
             Clock1PMessage::Toggle => {
                 self.running = !self.running;
+                if self.running {
+                    self.previous = Instant::now();
+                }
             }
         }
     }
