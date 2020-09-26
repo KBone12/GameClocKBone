@@ -1,13 +1,8 @@
 use std::time::Duration;
 
+#[derive(Clone, Debug)]
 pub struct ClockSettings {
-    time_limit: Duration,
-}
-
-impl ClockSettings {
-    pub fn time_limit(&self) -> Duration {
-        self.time_limit
-    }
+    pub time_limit: Duration,
 }
 
 impl Default for ClockSettings {
@@ -18,13 +13,7 @@ impl Default for ClockSettings {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Debug, Default)]
 pub struct Settings {
-    clock: ClockSettings,
-}
-
-impl Settings {
-    pub fn clock(&self) -> &ClockSettings {
-        &self.clock
-    }
+    pub clock: ClockSettings,
 }

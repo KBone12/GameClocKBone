@@ -1,6 +1,7 @@
 use iced::{button, Button, Container, Element, Length, Row, Subscription, Text};
 
 pub struct PausePane {
+    settings_button: button::State,
     back_button: button::State,
     reset_button: button::State,
 }
@@ -8,6 +9,7 @@ pub struct PausePane {
 impl PausePane {
     pub fn new() -> Self {
         Self {
+            settings_button: button::State::new(),
             back_button: button::State::new(),
             reset_button: button::State::new(),
         }
@@ -18,6 +20,10 @@ impl PausePane {
     pub fn view(&mut self) -> Element<PauseMessage> {
         Container::new(
             Row::new()
+                .push(
+                    Button::new(&mut self.settings_button, Text::new("Settings"))
+                        .on_press(PauseMessage::Settings),
+                )
                 .push(
                     Button::new(&mut self.back_button, Text::new("Back"))
                         .on_press(PauseMessage::Back),
@@ -41,6 +47,7 @@ impl PausePane {
 
 #[derive(Clone, Debug)]
 pub enum PauseMessage {
+    Settings,
     Back,
     Reset,
 }
