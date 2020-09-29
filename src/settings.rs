@@ -13,7 +13,15 @@ impl Default for ClockSettings {
     }
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub struct Settings {
-    pub clock: ClockSettings,
+    pub clocks: Vec<ClockSettings>,
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            clocks: vec![ClockSettings::default()],
+        }
+    }
 }

@@ -139,7 +139,7 @@ impl SettingPane {
                             .vertical_alignment(VerticalAlignment::Center),
                     )
                     .on_press(SettingMessage::Done(Settings {
-                        clock: ClockSettings {
+                        clocks: vec![ClockSettings {
                             time_limit: Duration::new(
                                 self.time_limit_hour_value
                                     .trim()
@@ -151,7 +151,7 @@ impl SettingPane {
                                     + self.time_limit_sec_value.trim().parse::<u64>().unwrap_or(0),
                                 0,
                             ),
-                        },
+                        }],
                         ..Settings::default()
                     })),
                 )

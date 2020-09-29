@@ -9,7 +9,7 @@ mod clock;
 mod pause;
 mod setting;
 
-use clock::{Clock1PMessage, Clock1PPane};
+use clock::{ClockMessage, ClockPane};
 use pause::{PauseMessage, PausePane};
 use setting::{SettingMessage, SettingPane};
 
@@ -42,8 +42,8 @@ impl Application for RootPane {
         }
 
         match message {
-            Self::Message::Clock1P(message) => match message {
-                Clock1PMessage::Pause => {
+            Self::Message::Clock(message) => match message {
+                ClockMessage::Pause => {
                     self.children.push_back(Pane::Pause(PausePane::new()));
                 }
                 _ => {}
@@ -58,8 +58,12 @@ impl Application for RootPane {
                 }
                 PauseMessage::Reset => {
                     self.children.clear();
-                    self.children.push_back(Pane::Clock1P(Clock1PPane::new(
-                        self.settings.clock.time_limit,
+                    self.children.push_back(Pane::Clock(ClockPane::new(
+                        self.settings
+                            .clocks
+                            .iter()
+                            .map(|clock| clock.time_limit)
+                            .collect::<Vec<_>>(),
                     )));
                 }
             },
@@ -67,8 +71,12 @@ impl Application for RootPane {
                 SettingMessage::Done(settings) => {
                     self.settings = settings;
                     self.children.clear();
-                    self.children.push_back(Pane::Clock1P(Clock1PPane::new(
-                        self.settings.clock.time_limit,
+                    self.children.push_back(Pane::Clock(ClockPane::new(
+                        self.settings
+                            .clocks
+                            .iter()
+                            .map(|clock| clock.time_limit)
+                            .collect::<Vec<_>>(),
                     )));
                 }
                 _ => {}
@@ -97,13 +105,13 @@ impl Application for RootPane {
 
 #[derive(Clone, Debug)]
 pub enum RootMessage {
-    Clock1P(Clock1PMessage),
+    Clock(ClockMessage),
     Pause(PauseMessage),
     Setting(SettingMessage),
 }
 
 enum Pane {
-    Clock1P(Clock1PPane),
+    Clock(ClockPane),
     Pause(PausePane),
     Setting(SettingPane),
 }
@@ -111,8 +119,8 @@ enum Pane {
 impl Pane {
     fn update(&mut self, message: RootMessage) {
         match self {
-            Pane::Clock1P(pane) => {
-                if let RootMessage::Clock1P(message) = message {
+            Pane::Clock(pane) => {
+                if let RootMessage::Clock(message) = message {
                     pane.update(message);
                 }
             }
@@ -131,7 +139,7 @@ impl Pane {
 
     fn view(&mut self) -> Element<RootMessage> {
         match self {
-            Pane::Clock1P(pane) => pane.view().map(RootMessage::Clock1P),
+            Pane::Clock(pane) => pane.view().map(RootMessage::Clock),
             Pane::Pause(pane) => pane.view().map(RootMessage::Pause),
             Pane::Setting(pane) => pane.view().map(RootMessage::Setting),
         }
@@ -139,7 +147,7 @@ impl Pane {
 
     fn subscription(&self) -> Subscription<RootMessage> {
         match self {
-            Pane::Clock1P(pane) => pane.subscription().map(RootMessage::Clock1P),
+            Pane::Clock(pane) => pane.subscription().map(RootMessage::Clock),
             Pane::Pause(pane) => pane.subscription().map(RootMessage::Pause),
             Pane::Setting(pane) => pane.subscription().map(RootMessage::Setting),
         }
