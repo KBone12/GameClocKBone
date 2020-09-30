@@ -104,7 +104,9 @@ impl ClockPane {
                             .align_items(Align::Center)
                             .into(),
                             3 => Column::new()
-                                .push(to_text(self.panes[0].remaining))
+                                .push(
+                                    to_text(self.panes[0].remaining).height(Length::FillPortion(1)),
+                                )
                                 .push(
                                     Row::with_children(
                                         self.panes[1..]
@@ -113,7 +115,7 @@ impl ClockPane {
                                             .collect(),
                                     )
                                     .width(Length::Fill)
-                                    .height(Length::Fill)
+                                    .height(Length::FillPortion(1))
                                     .align_items(Align::Center),
                                 )
                                 .width(Length::Fill)

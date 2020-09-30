@@ -8,7 +8,7 @@ pub struct ClockSettings {
 impl Default for ClockSettings {
     fn default() -> Self {
         Self {
-            time_limit: Duration::new(3 * 60, 0), // Default time limit is 3min.
+            time_limit: Duration::new(0, 0), // Default time limit is 3min.
         }
     }
 }
