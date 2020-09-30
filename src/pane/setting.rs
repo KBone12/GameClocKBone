@@ -141,16 +141,6 @@ impl SettingPane {
                     Container::new(
                         Column::new()
                             .push(
-                                Row::new()
-                                    .push(Radio::new(
-                                        Rule::AbsoluteTiming,
-                                        "absolute timing",
-                                        Some(Rule::AbsoluteTiming),
-                                        SettingMessage::RuleSelected,
-                                    ))
-                                    .align_items(Align::Center),
-                            )
-                            .push(
                                 Column::new()
                                     .push(
                                         Row::new()
@@ -198,6 +188,16 @@ impl SettingPane {
                                                     "enabled",
                                                     SettingMessage::ClockEnablingToggled,
                                                 ))
+                                                .push(
+                                                    Row::new()
+                                                        .push(Radio::new(
+                                                            Rule::AbsoluteTiming,
+                                                            "absolute timing",
+                                                            Some(Rule::AbsoluteTiming),
+                                                            SettingMessage::RuleSelected,
+                                                        ))
+                                                        .align_items(Align::Center),
+                                                )
                                                 .push(
                                                     Row::new()
                                                         .push(
